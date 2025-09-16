@@ -17,7 +17,7 @@ public class registration {
         return username.contains("_") && username.length() <= 5;
     }
 
-    // Checks password complexity: >=8 chars, uppercase, number, special char
+    
     public boolean checkPasswordComplexity(String password) {
         if (password.length() < 8)
             return false;
@@ -30,12 +30,14 @@ public class registration {
         return hasUpper && hasDigit && hasSpecial;
     }
 
-    // Checks if cell phone matches +27XXXXXXXXX
+    // Checks if cell phone matches
     public boolean checkCellPhoneNumber(String cellPhone) {
         String regex = "^\\+27\\d{9}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(cellPhone);
         return matcher.matches();
+        //the cell phone number was generated using ChatGPT (OpenAI, 2025).
+        //OpenAI, 2025. ChatGPT.[online] Available at: https://chat.openai.com[Accessed 5 September 2025].
     }
 
     // Registration method for username
@@ -47,7 +49,7 @@ public class registration {
         }
     }
 
-    // Separate method for password message
+    //method for password message
     public String validatePassword(userinput user) {
         if (!checkPasswordComplexity(user.getPassword())) {
             return "Password is not correctly formatted; please ensure that the password contains at least eight characters, a capital letter, a number, and a special character.";
@@ -56,7 +58,7 @@ public class registration {
         }
     }
 
-    // Separate method for cell phone message
+    //method for cell phone message
     public String validateCellPhone(userinput user) {
         if (!checkCellPhoneNumber(user.getCellPhone())) {
             return "Cell phone number incorrectly formatted or does not contain international code.";

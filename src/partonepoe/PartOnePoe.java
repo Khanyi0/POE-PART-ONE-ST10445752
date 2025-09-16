@@ -54,7 +54,7 @@ public class PartOnePoe {
             return;
         }
 
-        // Validate cell phone
+        
         String cellMessage = registration.validateCellPhone(newUser);
         System.out.println(cellMessage);
         if (!cellMessage.equals("Cell phone number successfully added.")) {
