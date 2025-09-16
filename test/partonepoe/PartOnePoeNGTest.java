@@ -61,7 +61,7 @@ public class PartOnePoeNGTest {
                 "Cell phone number incorrectly formatted or does not contain international code.");
     }
 
-    // -------------------- assertTrue / assertFalse tests --------------------
+    // assertTrue and assertFalse tests 
 
     @Test
     public void testLoginSuccessful() {
