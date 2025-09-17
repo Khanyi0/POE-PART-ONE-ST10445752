@@ -37,7 +37,7 @@ public class registration {
         Matcher matcher = pattern.matcher(cellPhone);
         return matcher.matches();
         //the cell phone number was generated using ChatGPT (OpenAI, 2025).
-        //OpenAI, 2025. ChatGPT.[online] Available at: https://chat.openai.com[Accessed 5 September 2025].
+        //OpenAI, 2025. ChatGPT.[online] Available at: https://chatgpt.com/c/68caeb14-b2e4-8325-af60-cadbdced4a2a[Accessed 5 September 2025].
     }
 
     // Registration method for username
