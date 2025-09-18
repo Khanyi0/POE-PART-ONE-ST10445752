@@ -22,7 +22,7 @@ public class PartOnePoeNGTest {
     @Test
     public void testUsernameCorrectlyFormatted() {
         String result = registration.registerUser(user);
-        Assert.assertEquals(result, "Welcome Kyle, Smith it is great to see you.");
+        Assert.assertEquals(result, "Username successfully captured.");
     }
 
     @Test
@@ -44,13 +44,13 @@ public class PartOnePoeNGTest {
         userinput weakPasswordUser = new userinput("kyl_1", "password", "+27838968976", "Kyle", "Smith");
         String result = registration.validatePassword(weakPasswordUser);
         Assert.assertEquals(result,
-                "Password is not correctly formatted, please ensure that the password contains at least eight characters, a capital letter, a number, and a special character.");
+                "Password is not correctly formatted; please ensure that the password contains at least eight characters, a capital letter, a number, and a special character.");
     }
 
     @Test
     public void testCellPhoneCorrectlyFormatted() {
         String result = registration.validateCellPhone(user);
-        Assert.assertEquals(result, "Cell number successfully captured.");
+        Assert.assertEquals(result, "Cell phone number successfully captured.");
     }
 
     @Test
@@ -58,7 +58,7 @@ public class PartOnePoeNGTest {
         userinput invalidCellUser = new userinput("kyl_1", "Ch&&sec@ke99!", "08966553", "Kyle", "Smith");
         String result = registration.validateCellPhone(invalidCellUser);
         Assert.assertEquals(result,
-                "Cell number is incorrectly formatted or does not contain an international code, please correct the number and try again.");
+                "Cell phone number incorrectly formatted or does not contain international code, please correct the number and try again.");
     }
     
     

@@ -61,7 +61,7 @@ public class registration {
     //method for cell phone message
     public String validateCellPhone(userinput user) {
         if (!checkCellPhoneNumber(user.getCellPhone())) {
-            return "Cell phone number incorrectly formatted or does not contain international code.";
+            return "Cell phone number incorrectly formatted or does not contain international code, please correct the number and try again.";
         } else {
             return "Cell phone number successfully captured.";
         }

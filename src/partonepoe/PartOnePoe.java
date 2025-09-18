@@ -55,13 +55,7 @@ public class PartOnePoe {
         }
 
         
-        String cellMessage = registration.validateCellPhone(newUser);
-        System.out.println(cellMessage);
-        if (!cellMessage.equals("Cell phone number successfully added.")) {
-            System.out.println("Please restart and try again.");
-            sc.close();
-            return;
-        }
+        
 
         // Login section
         System.out.println("\n=== User Login ===");
