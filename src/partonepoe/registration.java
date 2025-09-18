@@ -63,7 +63,7 @@ public class registration {
         if (!checkCellPhoneNumber(user.getCellPhone())) {
             return "Cell phone number incorrectly formatted or does not contain international code.";
         } else {
-            return "Cell phone number successfully added.";
+            return "Cell phone number successfully captured.";
         }
     }
 }
