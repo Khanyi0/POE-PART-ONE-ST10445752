@@ -61,7 +61,7 @@ public class PartOnePoe {
             System.out.println(cellMessage);
         } while (!registration.checkCellPhoneNumber(cellPhone));
 
-        // Create final user object
+        // user object
         userinput newUser = new userinput(username, password, cellPhone, firstName, lastName);
 
         // Login section
@@ -79,7 +79,7 @@ public class PartOnePoe {
             }
         } while (!loginStatus);
 
-        // QuickChat section
+        //part two QuickChat section
         JOptionPane.showMessageDialog(null, "Welcome to QuickChat!");
         Message messageObj = new Message();
         int choice;
@@ -122,7 +122,7 @@ public class PartOnePoe {
                             }
                         } while (msgText.length() > 250);
 
-                        // Generate ID and hash
+                        // message ID and hash
                         String msgID = messageObj.generateMessageID();
                         String msgHash = messageObj.createMessageHash(msgID, i, msgText);
 
@@ -136,7 +136,9 @@ public class PartOnePoe {
                     JOptionPane.showMessageDialog(null, "Total Messages Sent: " + messageObj.returnTotalMessages());
                 }
                 case 2 -> JOptionPane.showMessageDialog(null, "Coming soon.");
+                
                 case 3 -> JOptionPane.showMessageDialog(null, "Goodbye! Exiting QuickChat...");
+                
                 default -> JOptionPane.showMessageDialog(null, "Invalid option. Please enter 1, 2, or 3.");
             }
         } while (choice != 3);
