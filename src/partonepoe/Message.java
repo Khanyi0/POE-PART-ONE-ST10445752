@@ -57,7 +57,7 @@ public class Message {
             case 1 -> { // Disregard
                 return "Message disregarded.";
             }
-            case 2 -> { // Store
+            case 2 -> { // Store message
                 storeMessage(msgID, hash, recipient, msgText);
                 return "Message successfully stored.";
             }
@@ -89,7 +89,7 @@ public class Message {
             Object obj = parser.parse(new FileReader(FILE_NAME));
             messageArray = (JSONArray) obj;
         } catch (Exception e) {
-            messageArray = new JSONArray(); // start new array if file doesn't exist
+            messageArray = new JSONArray(); 
         }
 
         messageArray.add(msgObj);
