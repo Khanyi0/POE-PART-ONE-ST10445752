@@ -1,8 +1,8 @@
-name: Java CI 
+name: Java CI with TestNG
 
 on:
   push:
-    branches: [ "master"   ]
+    branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
 
@@ -20,11 +20,18 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Compile Java code
+    - name: Compile Java source files
       run: |
         mkdir -p bin
         javac -d bin $(find . -name "*.java")
 
     - name: Run TestNG tests
       run: |
+        # Ensure TestNG is available; if not, download it automatically
+        mkdir -p lib
+        if [ ! -f lib/testng.jar ]; then
+          echo "Downloading TestNG..."
+          curl -L -o lib/testng.jar https://repo1.maven.org/maven2/org/testng/testng/7.10.2/testng-7.10.2.jar
+        fi
+        echo "Running TestNG tests..."
         java -cp "bin:lib/*" org.testng.TestNG testng.xml
