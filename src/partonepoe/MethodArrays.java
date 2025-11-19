@@ -16,8 +16,8 @@ import java.util.Optional;
  * @author RC_Student_Lab
  */
 public class MethodArrays{
-    
 
+    
     private static class Message {
         String id;
         String hash;
@@ -33,141 +33,147 @@ public class MethodArrays{
             this.status = status.toLowerCase();
         }
 
-        // Format message for stored/disregarded display
-        String getFormattedForStorage() {
-            return "Recipient: " + recipient + ", Message: " + text;
+        String getId() {
+            return id;
         }
 
-        // Format message including sender (for sent messages)
-        String getFormattedWithSender() {
-            return "Sender: Developer, Recipient: " + recipient + ", Message: " + text;
+        String getHash() {
+            return hash;
+        }
+
+        String getRecipient() {
+            return recipient;
+        }
+
+        String getText() {
+            return text;
+        }
+
+        String getStatus() {
+            return status;
         }
     }
 
-    // -------------------- List to hold all messages --------------------
     private final List<Message> allMessages = new ArrayList<>();
 
     // -------------------- Populate Test Data --------------------
     public void populateTestData() {
         allMessages.clear();
-
         // SENT messages
-        addMessage("sent", "MSG001", "HASH001", "+27834557896", "Did you get the cake?");
-        addMessage("sent", "MSG004", "HASH004", "+27838884567", "It is dinner time!");
-
+        addMessage("MSG001", "HASH001", "+27834557896", "Did you get the cake?", "sent");
+        addMessage("MSG004", "HASH004", "+2783888450", "It is dinner time!", "sent");
         // STORED messages
-        addMessage("stored", "MSG002", "HASH002", "+27838884567",
-                   "Where are you? You are late! I have asked you to be on time.");
-        addMessage("stored", "MSG005", "HASH005", "+27838884567",
-                   "Ok, I am leaving without you.");
-
+        addMessage("MSG002", "HASH002", "+27838884567", "Where are you? You are late! I have asked you to be on time.", "stored");
+        addMessage("MSG005", "HASH005", "+27838884567", "Ok, I am leaving without you.", "stored");
         // DISREGARDED message
-        addMessage("disregard", "MSG003", "HASH003", "+27834484567", "Yohoooo, I am at your gate.");
+        addMessage("MSG003", "HASH003", "+27834484567", "Yohoooo, I am at your gate.", "disregard");
     }
 
     // -------------------- Add Message --------------------
-    public void addMessage(String status, String msgID, String hash, String recipient, String message) {
-        allMessages.add(new Message(msgID, hash, recipient, message, status));
+    public void addMessage(String id, String hash, String recipient, String message, String status) {
+        allMessages.add(new Message(id, hash, recipient, message, status));
     }
 
     // -------------------- Getters --------------------
     public List<String> getSentMessages() {
-        List<String> result = new ArrayList<>();
-        for (Message m : allMessages) {
-            if ("sent".equals(m.status)) result.add(m.getFormattedWithSender());
+        List<String> sentMessages = new ArrayList<>();
+        for (Message message : allMessages) {
+            if (message.getStatus().equals("sent")) {
+                sentMessages.add(message.getText());
+            }
         }
-        return result;
+        return sentMessages;
     }
 
     public List<String> getStoredMessages() {
-        List<String> result = new ArrayList<>();
-        for (Message m : allMessages) {
-            if ("stored".equals(m.status)) result.add(m.getFormattedForStorage());
+        List<String> storedMessages = new ArrayList<>();
+        for (Message message : allMessages) {
+            if (message.getStatus().equals("stored")) {
+                storedMessages.add(message.getText());
+            }
         }
-        return result;
+        return storedMessages;
     }
 
     public List<String> getDisregardedMessages() {
-        List<String> result = new ArrayList<>();
-        for (Message m : allMessages) {
-            if ("disregard".equals(m.status)) result.add(m.getFormattedForStorage());
+        List<String> disregardedMessages = new ArrayList<>();
+        for (Message message : allMessages) {
+            if (message.getStatus().equals("disregard")) {
+                disregardedMessages.add(message.getText());
+            }
         }
-        return result;
-    }
-
-    public List<String> getRecipients() {
-        List<String> result = new ArrayList<>();
-        for (Message m : allMessages) result.add(m.recipient);
-        return result;
+        return disregardedMessages;
     }
 
     public List<String> getMessageHashes() {
-        List<String> result = new ArrayList<>();
-        for (Message m : allMessages) result.add(m.hash);
-        return result;
+        List<String> messageHashes = new ArrayList<>();
+        for (Message message : allMessages) {
+            messageHashes.add(message.getHash());
+        }
+        return messageHashes;
     }
 
     public List<String> getMessageIDs() {
-        List<String> result = new ArrayList<>();
-        for (Message m : allMessages) result.add(m.id);
-        return result;
+        List<String> messageIDs = new ArrayList<>();
+        for (Message message : allMessages) {
+            messageIDs.add(message.getId());
+        }
+        return messageIDs;
     }
 
-    // -------------------- Get Longest Sent Message --------------------
+    // -------------------- Longest Sent Message --------------------
     public String getLongestSentMessage() {
-        Message longestMsg = null;
-
-        for (Message m : allMessages) {
-            if ("sent".equals(m.status)) {
-                if (longestMsg == null || m.text.length() > longestMsg.text.length()) {
-                    longestMsg = m;
-                }
+        String longestMessage = "";
+        for (Message message : allMessages) {
+            if (message.getStatus().equals("sent") && message.getText().length() > longestMessage.length()) {
+                longestMessage = message.getText();
             }
         }
-
-        return (longestMsg != null) ? longestMsg.getFormattedWithSender() : "";
+        return longestMessage;
     }
 
     // -------------------- Search by Message ID --------------------
-    public String searchByMessageID(String msgID) {
-        Optional<Message> opt = allMessages.stream()
-                .filter(m -> m.id.equals(msgID))
-                .findFirst();
-
-        return opt.map(m -> m.text).orElse("Message ID not found.");
+    public String searchByMessageID(String messageID) {
+        for (Message message : allMessages) {
+            if (message.getId().equals(messageID)) {
+                return "Recipient: " + message.getRecipient() + ", Message: " + message.getText();
+            }
+        }
+        return "Message not found";
     }
 
     // -------------------- Search by Recipient --------------------
     public List<String> searchByRecipient(String recipient) {
-        List<String> results = new ArrayList<>();
-        for (Message m : allMessages) {
-            if (recipient.equals(m.recipient)) {
-                if ("sent".equals(m.status)) results.add(m.getFormattedWithSender());
-                else results.add(m.getFormattedForStorage());
+        List<String> messages = new ArrayList<>();
+        for (Message message : allMessages) {
+            if (message.getRecipient().equals(recipient)) {
+                messages.add(message.getText());
             }
         }
-        return results;
+        return messages;
     }
 
     // -------------------- Delete Message by Hash --------------------
-    public String deleteMessageByHash(String hash) {
-        for (int i = 0; i < allMessages.size(); i++) {
-            if (allMessages.get(i).hash.equals(hash)) {
-                allMessages.remove(i);
-                return "Message with hash " + hash + " successfully deleted.";
+    public String deleteMessageByHash(String messageHash) {
+        for (Message message : allMessages) {
+            if (message.getHash().equals(messageHash)) {
+                allMessages.remove(message);
+                return "Message successfully deleted";
             }
         }
-        return "Message hash not found.";
+        return "Message not found";
     }
 
     // -------------------- Sent Messages Report --------------------
     public List<String> getSentMessagesReport() {
         List<String> report = new ArrayList<>();
-        for (Message m : allMessages) {
-            if ("sent".equals(m.status)) {
-                report.add("Message ID: " + m.id + ", Hash: " + m.hash + ", " + m.getFormattedWithSender());
+        for (Message message : allMessages) {
+            if (message.getStatus().equals("sent")) {
+                report.add("Message Hash: " + message.getHash() + ", Recipient: " + message.getRecipient() + ", Message: " + message.getText());
             }
         }
         return report;
     }
 }
+
+// 
