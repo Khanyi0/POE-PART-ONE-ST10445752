@@ -4,6 +4,7 @@
  */
 package partonepoe;
 
+import java.util.List;
 import java.util.Scanner;
 import javax.swing.JOptionPane;
 
@@ -80,72 +81,122 @@ public class PartOnePoe {
         } while (!loginStatus);
 
         //part two QuickChat section
+      
         JOptionPane.showMessageDialog(null, "Welcome to QuickChat!");
-        Message messageObj = new Message();
+        MethodArrays methodArrays = new MethodArrays();
+        methodArrays.populateTestData(); // Populate Part 3 test messages
+
         int choice;
         do {
             String input = JOptionPane.showInputDialog("""
-                    Please select an option:
+                    QuickChat Menu:
                     1) Send Messages
-                    2) Show Recently Sent Messages
+                    2) Message Management
                     3) Quit""");
-            if (input == null || input.isEmpty()) {
-                choice = 0;
-            } else {
-                choice = Integer.parseInt(input);
-            }
+
+            if (input == null || input.isEmpty()) choice = 0;
+            else choice = Integer.parseInt(input);
 
             switch (choice) {
-                case 1 -> {
-                    int numMessages = Integer.parseInt(
-                            JOptionPane.showInputDialog("How many messages would you like to send?"));
-                    for (int i = 1; i <= numMessages; i++) {
-                        JOptionPane.showMessageDialog(null, "Entering message " + i + " of " + numMessages);
-
-                        // Recipient validation
-                        String recipient;
-                        do {
-                            recipient = JOptionPane.showInputDialog("Enter recipient number (e.g. +27718693002):");
-                            if (messageObj.checkRecipientCell(recipient) != 1) {
-                                JOptionPane.showMessageDialog(null,
-                                        "Invalid number format. Must start with '+' and have ≤ 10 digits after code.");
-                            }
-                        } while (messageObj.checkRecipientCell(recipient) != 1);
-
-                        // Message validation
-                        String msgText;
-                        do {
-                            msgText = JOptionPane.showInputDialog("Enter your message (max 250 characters):");
-                            if (msgText.length() > 250) {
-                                JOptionPane.showMessageDialog(null,
-                                        "Message exceeds 250 characters by " + (msgText.length() - 250) + ". Please shorten it.");
-                            }
-                        } while (msgText.length() > 250);
-
-                        // message ID and hash
-                        String msgID = messageObj.generateMessageID();
-                        String msgHash = messageObj.createMessageHash(msgID, i, msgText);
-
-                        // Choose send/store/disregard
-                        String[] options = {"Send Message", "Disregard Message", "Store Message"};
-                        int action = JOptionPane.showOptionDialog(null, "Choose an option for this message:", "Message Action",
-                                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-                        String status = messageObj.sendMessageAction(action, msgID, msgHash, recipient, msgText);
-                        JOptionPane.showMessageDialog(null, status);
-                    }
-                    JOptionPane.showMessageDialog(null, "Total Messages Sent: " + messageObj.returnTotalMessages());
-                }
-                case 2 -> JOptionPane.showMessageDialog(null, "Coming soon.");
-                
+                case 1 -> sendMessages(methodArrays);
+                case 2 -> manageMessagesPart3(methodArrays);
                 case 3 -> JOptionPane.showMessageDialog(null, "Goodbye! Exiting QuickChat...");
-                
-                default -> JOptionPane.showMessageDialog(null, "Invalid option. Please enter 1, 2, or 3.");
+                default -> JOptionPane.showMessageDialog(null, "Invalid option. Please enter 1-3.");
             }
+
         } while (choice != 3);
 
         sc.close();
     }
+
+    // ------------------- Part 2: Send Messages -------------------
+    private static void sendMessages(MethodArrays methodArrays) {
+        int numMessages = Integer.parseInt(JOptionPane.showInputDialog("How many messages would you like to send?"));
+        for (int i = 1; i <= numMessages; i++) {
+            JOptionPane.showMessageDialog(null, "Entering message " + i + " of " + numMessages);
+
+            String recipient;
+            do {
+                recipient = JOptionPane.showInputDialog("Enter recipient number (e.g. +27718693002):");
+                if (recipient == null || !recipient.matches("^\\+\\d{9,10}$")) {
+                    JOptionPane.showMessageDialog(null, "Invalid number format. Must start with '+' and have 9-10 digits after code.");
+                    recipient = null;
+                }
+            } while (recipient == null);
+
+            String msgText;
+            do {
+                msgText = JOptionPane.showInputDialog("Enter your message (max 250 characters):");
+            } while (msgText.length() > 250);
+
+            String msgID = "MSG" + (methodArrays.getSentMessages().size() + methodArrays.getRecipients().size() + 1);
+            String msgHash = "HASH" + msgID;
+
+            String[] options = {"Send Message", "Disregard Message", "Store Message"};
+            int action = JOptionPane.showOptionDialog(null, "Choose an option for this message:", "Message Action",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+            String status;
+            switch(action) {
+                case 0 -> status = "sent";
+                case 1 -> status = "disregard";
+                case 2 -> status = "stored";
+                default -> status = "sent";
+            }
+
+            methodArrays.addMessage(status, msgID, msgHash, recipient, msgText);
+            JOptionPane.showMessageDialog(null, "Message processed as " + status + ".");
+        }
+    }
+
+    // ------------------- Part 3: Message Management -------------------
+    private static void manageMessagesPart3(MethodArrays methodArrays) {
+        int subChoice;
+        do {
+            String input = JOptionPane.showInputDialog("""
+                    Part 3 Menu:
+                    1) Display Sender & Recipient of Sent Messages
+                    2) Display Longest Sent Message
+                    3) Search by Message ID
+                    4) Search Messages by Recipient
+                    5) Delete Message by Hash
+                    6) Display Sent Messages Report
+                    7) Back to Main Menu""");
+
+            if (input == null || input.isEmpty()) subChoice = 0;
+            else subChoice = Integer.parseInt(input);
+
+            switch (subChoice) {
+                case 1 -> {
+                    List<String> sent = methodArrays.getSentMessages();
+                    List<String> rec = methodArrays.getRecipients();
+                    StringBuilder sb = new StringBuilder("Sent Messages:\n");
+                    for (int i = 0; i < sent.size(); i++)
+                        sb.append("Recipient: ").append(rec.get(i)).append(" - Message: ").append(sent.get(i)).append("\n");
+                    JOptionPane.showMessageDialog(null, sb.toString());
+                }
+                case 2 -> JOptionPane.showMessageDialog(null, "Longest Sent Message: " + methodArrays.getLongestSentMessage());
+                case 3 -> {
+                    String id = JOptionPane.showInputDialog("Enter Message ID to search:");
+                    JOptionPane.showMessageDialog(null, methodArrays.searchByMessageID(id));
+                }
+                case 4 -> {
+                    String recipient = JOptionPane.showInputDialog("Enter recipient number to search:");
+                    List<String> messages = methodArrays.searchByRecipient(recipient);
+                    if (messages.isEmpty()) JOptionPane.showMessageDialog(null, "No messages found for recipient " + recipient);
+                    else JOptionPane.showMessageDialog(null, "Messages to " + recipient + ":\n" + String.join("\n", messages));
+                }
+                case 5 -> {
+                    String hash = JOptionPane.showInputDialog("Enter message hash to delete:");
+                    JOptionPane.showMessageDialog(null, methodArrays.deleteMessageByHash(hash));
+                }
+                case 6 -> {
+                    List<String> report = methodArrays.getSentMessagesReport();
+                    JOptionPane.showMessageDialog(null, String.join("\n", report));
+                }
+                case 7 -> JOptionPane.showMessageDialog(null, "Returning to Main Menu...");
+                default -> JOptionPane.showMessageDialog(null, "Invalid option.");
+            }
+
+        } while (subChoice != 7);
+    }
 }
-
-
-       
