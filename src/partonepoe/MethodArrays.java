@@ -33,21 +33,21 @@ public class MethodArrays{
             this.status = status.toLowerCase();
         }
 
-        // Format message for stored/disregarded display
+        // Format message for stored and disregarded display
         String getFormattedForStorage() {
             return "Recipient: " + recipient + ", Message: " + text;
         }
 
-        // Format message including sender (for sent messages)
+        // Format message including sender 
         String getFormattedWithSender() {
             return "Sender: Developer, Recipient: " + recipient + ", Message: " + text;
         }
     }
 
-    // -------------------- List to hold all messages --------------------
+    // List to hold all messages 
     private final List<Message> allMessages = new ArrayList<>();
 
-    // -------------------- Populate Test Data --------------------
+    // Populate Test Data 
     public void populateTestData() {
         allMessages.clear();
 
@@ -65,12 +65,12 @@ public class MethodArrays{
         addMessage("disregard", "MSG003", "HASH003", "+27834484567", "Yohoooo, I am at your gate.");
     }
 
-    // -------------------- Add Message --------------------
+    //  Add Message 
     public void addMessage(String status, String msgID, String hash, String recipient, String message) {
         allMessages.add(new Message(msgID, hash, recipient, message, status));
     }
 
-    // -------------------- Getters --------------------
+    
     public List<String> getSentMessages() {
         List<String> result = new ArrayList<>();
         for (Message m : allMessages) {
@@ -113,7 +113,7 @@ public class MethodArrays{
         return result;
     }
 
-    // -------------------- Get Longest Sent Message --------------------
+    // Get Longest Sent Message 
     public String getLongestSentMessage() {
         Message longestMsg = null;
 
@@ -128,7 +128,7 @@ public class MethodArrays{
         return (longestMsg != null) ? longestMsg.getFormattedWithSender() : "";
     }
 
-    // -------------------- Search by Message ID --------------------
+    //  Search by Message ID 
     public String searchByMessageID(String msgID) {
         Optional<Message> opt = allMessages.stream()
                 .filter(m -> m.id.equals(msgID))
@@ -137,7 +137,7 @@ public class MethodArrays{
         return opt.map(m -> m.text).orElse("Message ID not found.");
     }
 
-    // -------------------- Search by Recipient --------------------
+    // Search by Recipient
     public List<String> searchByRecipient(String recipient) {
         List<String> results = new ArrayList<>();
         for (Message m : allMessages) {
@@ -149,7 +149,7 @@ public class MethodArrays{
         return results;
     }
 
-    // -------------------- Delete Message by Hash --------------------
+    // Delete Message by Hash 
     public String deleteMessageByHash(String hash) {
         for (int i = 0; i < allMessages.size(); i++) {
             if (allMessages.get(i).hash.equals(hash)) {
@@ -160,7 +160,7 @@ public class MethodArrays{
         return "Message hash not found.";
     }
 
-    // -------------------- Sent Messages Report --------------------
+    // Sent Messages Report
     public List<String> getSentMessagesReport() {
         List<String> report = new ArrayList<>();
         for (Message m : allMessages) {

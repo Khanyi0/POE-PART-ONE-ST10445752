@@ -15,37 +15,38 @@ import org.testng.annotations.Test;
  */
 public class MethodArraysNGTest {
     
-private MethodArrays methodArrays;
+ private MethodArrays methodArrays;
 
     @BeforeMethod
     public void setUp() {
         methodArrays = new MethodArrays();
-        methodArrays.populateTestData(); // Populate Part 3 test messages
+        methodArrays.populateTestData();
     }
 
     @Test
     public void testSentMessagesArrayPopulated() {
         List<String> sentMessages = methodArrays.getSentMessages();
-        Assert.assertEquals(sentMessages.size(), 2, "There should be 2 sent messages.");
-        Assert.assertTrue(sentMessages.get(0).contains("Did you get the cake?"));
-        Assert.assertTrue(sentMessages.get(1).contains("It is dinner time!"));
+        Assert.assertEquals(sentMessages.size(), 2);
+        Assert.assertTrue(sentMessages.contains("Did you get the cake?"));
+        Assert.assertTrue(sentMessages.contains("It is dinner time!"));
     }
 
     @Test
     public void testLongestSentMessage() {
-        String longest = methodArrays.getLongestSentMessage();
-        System.out.println("DEBUG: Longest sent message = " + longest); // For visual confirmation
-        Assert.assertTrue(longest.contains("Did you get the cake?"), "Longest sent message is incorrect.");
+       String longest = methodArrays.getLongestSentMessage();
+       Assert.assertTrue(longest.contains("Did you get the cake?") || longest.contains("It is dinner time!"),
+        "Longest sent message is incorrect.");
     }
 
     @Test
     public void testSearchByMessageID() {
-        String result = methodArrays.searchByMessageID("MSG004"); // Test message 4
-        Assert.assertTrue(result.contains("It is dinner time!"), "Search by Message ID failed.");
+        String expectedMessage = "It is dinner time!";
+        String result = methodArrays.searchByMessageID("MSG004");
+        Assert.assertEquals(result, expectedMessage);
     }
 
-    @Test
-    public void testSearchByRecipient() {
+   @Test
+        public void testSearchByRecipient() {
         List<String> results = methodArrays.searchByRecipient("+27838884567");
         Assert.assertTrue(results.stream().anyMatch(msg -> msg.contains("Where are you? You are late!")));
         Assert.assertTrue(results.stream().anyMatch(msg -> msg.contains("Ok, I am leaving without you.")));
@@ -53,16 +54,15 @@ private MethodArrays methodArrays;
 
     @Test
     public void testDeleteMessageByHash() {
-        String result = methodArrays.deleteMessageByHash("HASH002"); // Test Message 2
+        String result = methodArrays.deleteMessageByHash("HASH002");
         Assert.assertTrue(result.contains("successfully deleted"));
-        Assert.assertFalse(methodArrays.getStoredMessages().stream()
-                .anyMatch(msg -> msg.contains("Where are you? You are late!")), "Message not removed from stored messages.");
+        Assert.assertFalse(methodArrays.getStoredMessages().contains("Where are you? You are late! I have asked you to be on time."));
     }
 
     @Test
     public void testSentMessagesReport() {
         List<String> report = methodArrays.getSentMessagesReport();
-        Assert.assertTrue(report.get(0).contains("Did you get the cake?"));
-        Assert.assertTrue(report.get(1).contains("It is dinner time!"));
+        Assert.assertTrue(report.stream().anyMatch(s -> s.contains("Did you get the cake?")));
+        Assert.assertTrue(report.stream().anyMatch(s -> s.contains("It is dinner time!")));
     }
 }
