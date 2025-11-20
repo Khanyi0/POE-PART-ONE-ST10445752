@@ -34,4 +34,4 @@ jobs:
           curl -L -o lib/testng.jar https://repo1.maven.org/maven2/org/testng/testng/7.10.2/testng-7.10.2.jar
         fi
         echo "Running TestNG tests..."
-        java -cp "bin:lib/*" org.testng.TestNG testng.xml
+        java -cp "bin:lib/*" org.testng.TestNG testng.xml 
