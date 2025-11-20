@@ -7,6 +7,7 @@ package partonepoe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 
@@ -17,7 +18,7 @@ import java.util.List;
 public class MethodArrays{
 
     
-    private static class Message {
+     private static class Message {
         String id;
         String hash;
         String recipient;
@@ -32,147 +33,142 @@ public class MethodArrays{
             this.status = status.toLowerCase();
         }
 
-        String getId() {
-            return id;
+        // Format message for stored/disregarded display
+        String getFormattedForStorage() {
+            return "Recipient: " + recipient + ", Message: " + text;
         }
 
-        String getHash() {
-            return hash;
-        }
-
-        String getRecipient() {
-            return recipient;
-        }
-
-        String getText() {
-            return text;
-        }
-
-        String getStatus() {
-            return status;
+        // Format message including sender (for sent messages)
+        String getFormattedWithSender() {
+            return "Sender: Developer, Recipient: " + recipient + ", Message: " + text;
         }
     }
 
+    // -------------------- List to hold all messages --------------------
     private final List<Message> allMessages = new ArrayList<>();
 
-    //  Populate Test Data 
+    // -------------------- Populate Test Data --------------------
     public void populateTestData() {
         allMessages.clear();
+
         // SENT messages
-        addMessage("MSG001", "HASH001", "+27834557896", "Did you get the cake?", "sent");
-        addMessage("MSG004", "HASH004", "+2783888450", "It is dinner time!", "sent");
+        addMessage("sent", "MSG001", "HASH001", "+27834557896", "Did you get the cake?");
+        addMessage("sent", "MSG004", "HASH004", "+27838884567", "It is dinner time!");
+
         // STORED messages
-        addMessage("MSG002", "HASH002", "+27838884567", "Where are you? You are late! I have asked you to be on time.", "stored");
-        addMessage("MSG005", "HASH005", "+27838884567", "Ok, I am leaving without you.", "stored");
+        addMessage("stored", "MSG002", "HASH002", "+27838884567",
+                   "Where are you? You are late! I have asked you to be on time.");
+        addMessage("stored", "MSG005", "HASH005", "+27838884567",
+                   "Ok, I am leaving without you.");
+
         // DISREGARDED message
-        addMessage("MSG003", "HASH003", "+27834484567", "Yohoooo, I am at your gate.", "disregard");
+        addMessage("disregard", "MSG003", "HASH003", "+27834484567", "Yohoooo, I am at your gate.");
     }
 
-    // Add Message 
-    public void addMessage(String id, String hash, String recipient, String message, String status) {
-        allMessages.add(new Message(id, hash, recipient, message, status));
+    // -------------------- Add Message --------------------
+    public void addMessage(String status, String msgID, String hash, String recipient, String message) {
+        allMessages.add(new Message(msgID, hash, recipient, message, status));
     }
 
-   
+    // -------------------- Getters --------------------
     public List<String> getSentMessages() {
-        List<String> sentMessages = new ArrayList<>();
-        for (Message message : allMessages) {
-            if (message.getStatus().equals("sent")) {
-                sentMessages.add(message.getText());
-            }
+        List<String> result = new ArrayList<>();
+        for (Message m : allMessages) {
+            if ("sent".equals(m.status)) result.add(m.getFormattedWithSender());
         }
-        return sentMessages;
+        return result;
     }
 
     public List<String> getStoredMessages() {
-        List<String> storedMessages = new ArrayList<>();
-        for (Message message : allMessages) {
-            if (message.getStatus().equals("stored")) {
-                storedMessages.add(message.getText());
-            }
+        List<String> result = new ArrayList<>();
+        for (Message m : allMessages) {
+            if ("stored".equals(m.status)) result.add(m.getFormattedForStorage());
         }
-        return storedMessages;
+        return result;
     }
 
     public List<String> getDisregardedMessages() {
-        List<String> disregardedMessages = new ArrayList<>();
-        for (Message message : allMessages) {
-            if (message.getStatus().equals("disregard")) {
-                disregardedMessages.add(message.getText());
-            }
+        List<String> result = new ArrayList<>();
+        for (Message m : allMessages) {
+            if ("disregard".equals(m.status)) result.add(m.getFormattedForStorage());
         }
-        return disregardedMessages;
+        return result;
+    }
+
+    public List<String> getRecipients() {
+        List<String> result = new ArrayList<>();
+        for (Message m : allMessages) result.add(m.recipient);
+        return result;
     }
 
     public List<String> getMessageHashes() {
-        List<String> messageHashes = new ArrayList<>();
-        for (Message message : allMessages) {
-            messageHashes.add(message.getHash());
-        }
-        return messageHashes;
+        List<String> result = new ArrayList<>();
+        for (Message m : allMessages) result.add(m.hash);
+        return result;
     }
 
     public List<String> getMessageIDs() {
-        List<String> messageIDs = new ArrayList<>();
-        for (Message message : allMessages) {
-            messageIDs.add(message.getId());
-        }
-        return messageIDs;
+        List<String> result = new ArrayList<>();
+        for (Message m : allMessages) result.add(m.id);
+        return result;
     }
 
-    // Longest Sent Message 
+    // -------------------- Get Longest Sent Message --------------------
     public String getLongestSentMessage() {
-        String longestMessage = "";
-        for (Message message : allMessages) {
-            if (message.getStatus().equals("sent") && message.getText().length() > longestMessage.length()) {
-                longestMessage = message.getText();
+        Message longestMsg = null;
+
+        for (Message m : allMessages) {
+            if ("sent".equals(m.status)) {
+                if (longestMsg == null || m.text.length() > longestMsg.text.length()) {
+                    longestMsg = m;
+                }
             }
         }
-        return longestMessage;
+
+        return (longestMsg != null) ? longestMsg.getFormattedWithSender() : "";
     }
 
-    // Search by Message ID 
+    // -------------------- Search by Message ID --------------------
     public String searchByMessageID(String msgID) {
-    for (Message m : allMessages) {
-        if (m.id.equals(msgID)) {
-            return m.text;   // return ONLY the raw message text
-        }
-    }
-    return "Message ID not found.";
-}
+        Optional<Message> opt = allMessages.stream()
+                .filter(m -> m.id.equals(msgID))
+                .findFirst();
 
-    // Search by Recipient 
+        return opt.map(m -> m.text).orElse("Message ID not found.");
+    }
+
+    // -------------------- Search by Recipient --------------------
     public List<String> searchByRecipient(String recipient) {
-        List<String> messages = new ArrayList<>();
-        for (Message message : allMessages) {
-            if (message.getRecipient().equals(recipient)) {
-                messages.add(message.getText());
+        List<String> results = new ArrayList<>();
+        for (Message m : allMessages) {
+            if (recipient.equals(m.recipient)) {
+                if ("sent".equals(m.status)) results.add(m.getFormattedWithSender());
+                else results.add(m.getFormattedForStorage());
             }
         }
-        return messages;
+        return results;
     }
 
-    // Delete Message by Hash 
-    public String deleteMessageByHash(String messageHash) {
-        for (Message message : allMessages) {
-            if (message.getHash().equals(messageHash)) {
-                allMessages.remove(message);
-                return "Message successfully deleted";
+    // -------------------- Delete Message by Hash --------------------
+    public String deleteMessageByHash(String hash) {
+        for (int i = 0; i < allMessages.size(); i++) {
+            if (allMessages.get(i).hash.equals(hash)) {
+                allMessages.remove(i);
+                return "Message with hash " + hash + " successfully deleted.";
             }
         }
-        return "Message not found";
+        return "Message hash not found.";
     }
 
-    // Sent Messages Report 
+    // -------------------- Sent Messages Report --------------------
     public List<String> getSentMessagesReport() {
         List<String> report = new ArrayList<>();
-        for (Message message : allMessages) {
-            if (message.getStatus().equals("sent")) {
-                report.add("Message Hash: " + message.getHash() + ", Recipient: " + message.getRecipient() + ", Message: " + message.getText());
+        for (Message m : allMessages) {
+            if ("sent".equals(m.status)) {
+                report.add("Message ID: " + m.id + ", Hash: " + m.hash + ", " + m.getFormattedWithSender());
             }
         }
         return report;
     }
 }
-
 // Github Link:  https://github.com/Khanyi0/POE-PART-ONE-ST10445752.git
