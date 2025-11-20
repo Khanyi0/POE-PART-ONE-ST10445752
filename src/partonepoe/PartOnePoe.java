@@ -113,15 +113,18 @@ public class PartOnePoe {
      private static void sendMessages(MethodArrays methodArrays) {
         int numMessages = Integer.parseInt(JOptionPane.showInputDialog("How many messages would you like to send?"));
         for (int i = 1; i <= numMessages; i++) {
-            JOptionPane.showMessageDialog(null, "Entering message " + i + " of " + numMessages);
+            JOptionPane.showMessageDialog(null, "Entering message " + i + " of " + numMessages); 
+            
             String recipient;
             do {
-                recipient = JOptionPane.showInputDialog("Enter recipient number (e.g. +27718693002):");
-                if (recipient == null || !recipient.matches("^\\+\\d{9,10}$")) {
-                    JOptionPane.showMessageDialog(null, "Invalid number format. Must start with '+' and have 9-10 digits after code.");
-                    recipient = null;
-                }
+            recipient = JOptionPane.showInputDialog("Enter recipient number (e.g. +27718693002):");
+            if (recipient == null || !recipient.matches("^\\+\\d{11}$")) {
+            JOptionPane.showMessageDialog(null,
+                "Invalid number format.\nMust start with '+' and contain **11 digits** after it.\nExample: +27718693002");
+            recipient = null;
+            }
             } while (recipient == null);
+            
             String msgText;
             do {
                 msgText = JOptionPane.showInputDialog("Enter your message (max 250 characters):");
