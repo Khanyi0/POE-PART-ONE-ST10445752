@@ -56,7 +56,7 @@ public class MethodArrays{
 
     private final List<Message> allMessages = new ArrayList<>();
 
-    // -------------------- Populate Test Data --------------------
+    //  Populate Test Data 
     public void populateTestData() {
         allMessages.clear();
         // SENT messages
@@ -69,12 +69,12 @@ public class MethodArrays{
         addMessage("MSG003", "HASH003", "+27834484567", "Yohoooo, I am at your gate.", "disregard");
     }
 
-    // -------------------- Add Message --------------------
+    // Add Message 
     public void addMessage(String id, String hash, String recipient, String message, String status) {
         allMessages.add(new Message(id, hash, recipient, message, status));
     }
 
-    // -------------------- Getters --------------------
+   
     public List<String> getSentMessages() {
         List<String> sentMessages = new ArrayList<>();
         for (Message message : allMessages) {
@@ -121,7 +121,7 @@ public class MethodArrays{
         return messageIDs;
     }
 
-    // -------------------- Longest Sent Message --------------------
+    // Longest Sent Message 
     public String getLongestSentMessage() {
         String longestMessage = "";
         for (Message message : allMessages) {
@@ -132,17 +132,17 @@ public class MethodArrays{
         return longestMessage;
     }
 
-    // -------------------- Search by Message ID --------------------
-    public String searchByMessageID(String messageID) {
-        for (Message message : allMessages) {
-            if (message.getId().equals(messageID)) {
-                return "Recipient: " + message.getRecipient() + ", Message: " + message.getText();
-            }
+    // Search by Message ID 
+    public String searchByMessageID(String msgID) {
+    for (Message m : allMessages) {
+        if (m.id.equals(msgID)) {
+            return m.text;   // return ONLY the raw message text
         }
-        return "Message not found";
     }
+    return "Message ID not found.";
+}
 
-    // -------------------- Search by Recipient --------------------
+    // Search by Recipient 
     public List<String> searchByRecipient(String recipient) {
         List<String> messages = new ArrayList<>();
         for (Message message : allMessages) {
@@ -153,7 +153,7 @@ public class MethodArrays{
         return messages;
     }
 
-    // -------------------- Delete Message by Hash --------------------
+    // Delete Message by Hash 
     public String deleteMessageByHash(String messageHash) {
         for (Message message : allMessages) {
             if (message.getHash().equals(messageHash)) {
@@ -164,7 +164,7 @@ public class MethodArrays{
         return "Message not found";
     }
 
-    // -------------------- Sent Messages Report --------------------
+    // Sent Messages Report 
     public List<String> getSentMessagesReport() {
         List<String> report = new ArrayList<>();
         for (Message message : allMessages) {
@@ -176,4 +176,4 @@ public class MethodArrays{
     }
 }
 
-// 
+// Github Link:  https://github.com/Khanyi0/POE-PART-ONE-ST10445752.git

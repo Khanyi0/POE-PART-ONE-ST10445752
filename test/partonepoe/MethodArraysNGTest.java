@@ -20,7 +20,7 @@ private MethodArrays methodArrays;
     @BeforeMethod
     public void setUp() {
         methodArrays = new MethodArrays();
-        methodArrays.populateTestData(); // Populate Part 3 test messages
+        methodArrays.populateTestData(); // Populate test messages
     }
 
     @Test

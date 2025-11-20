@@ -80,11 +80,11 @@ public class PartOnePoe {
             }
         } while (!loginStatus);
 
-        //part two QuickChat section
+        //part two: QuickChat section
       
         JOptionPane.showMessageDialog(null, "Welcome to QuickChat!");
         MethodArrays methodArrays = new MethodArrays();
-        methodArrays.populateTestData(); // Populate Part 3 test messages
+        methodArrays.populateTestData(); 
 
         int choice;
         do {
@@ -109,7 +109,7 @@ public class PartOnePoe {
         sc.close();
     }
 
-    // ------------------- Part 2: Send Messages -------------------
+    // --------- Part 2: Send Messages ---------
      private static void sendMessages(MethodArrays methodArrays) {
         int numMessages = Integer.parseInt(JOptionPane.showInputDialog("How many messages would you like to send?"));
         for (int i = 1; i <= numMessages; i++) {
@@ -146,7 +146,7 @@ public class PartOnePoe {
         }
     }
 
-    // ------------------- Part 3: Message Management -------------------
+    // -----Part 3: Message Management ------
     private static void manageMessagesPart3(MethodArrays methodArrays) {
         int subChoice;
         do {
